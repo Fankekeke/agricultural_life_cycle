@@ -1,0 +1,2 @@
+# agricultural_life_cycle
+基于WebGis的线上农产品生命周期交易系统

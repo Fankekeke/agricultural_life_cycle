@@ -35,6 +35,9 @@ public class BulletinInfoController {
         return R.ok(bulletinInfoService.getBulletinByPage(page, bulletinInfo));
     }
 
+    /**
+     * 获取公告列表
+     */
     @GetMapping("/list")
     public R list() {
         return R.ok(bulletinInfoService.list());

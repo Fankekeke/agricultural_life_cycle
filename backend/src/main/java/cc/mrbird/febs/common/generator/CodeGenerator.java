@@ -23,7 +23,7 @@ import java.util.Scanner;
 public class CodeGenerator {
 
     // 数据库 URL
-    private static final String URL = "jdbc:mysql://127.0.0.1:3307/agricultural_life_cycle?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/agricultural_life_cycle?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     // 数据库驱动
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
     // 数据库用户名
@@ -38,16 +38,21 @@ public class CodeGenerator {
     private static final String XML_PACKAGE_URL = "/src/main/resources/mapper/";
     // xml 文件模板
     private static final String XML_MAPPER_TEMPLATE_PATH = "generator/templates/mapper.xml";
-    // mapper 文件模板
-    private static final String MAPPER_TEMPLATE_PATH = "generator/templates/mapper.java";
+    // mapper 文件模板（基于bulletinMapper样式）
+    private static final String MAPPER_TEMPLATE_PATH = "generator/templates/mapper_bulletin.java.ftl";
     // entity 文件模板
     private static final String ENTITY_TEMPLATE_PATH = "generator/templates/entity.java";
-    // service 文件模板
-    private static final String SERVICE_TEMPLATE_PATH = "generator/templates/service.java";
-    // serviceImpl 文件模板
-    private static final String SERVICE_IMPL_TEMPLATE_PATH = "generator/templates/serviceImpl.java";
-    // controller 文件模板
-    private static final String CONTROLLER_TEMPLATE_PATH = "generator/templates/controller.java";
+    // service 文件模板（基于IBulletinInfoService样式）
+    private static final String SERVICE_TEMPLATE_PATH = "generator/templates/service_bulletin.java.ftl";
+    // serviceImpl 文件模板（基于BulletinInfoServiceImpl样式）
+    private static final String SERVICE_IMPL_TEMPLATE_PATH = "generator/templates/serviceImpl_bulletin.java.ftl";
+    // controller 文件模板（基于bulletinInfo模块样式）
+    private static final String CONTROLLER_TEMPLATE_PATH = "generator/templates/controller_bulletin.java.ftl";
+    // Vue 相关模板
+    private static final String VUE_INDEX_TEMPLATE_PATH = "generator/templates/vue_index.vue.ftl";
+    private static final String VUE_ADD_TEMPLATE_PATH = "generator/templates/vue_add.vue.ftl";
+    private static final String VUE_EDIT_TEMPLATE_PATH = "generator/templates/vue_edit.vue.ftl";
+    private static final String VUE_VIEW_TEMPLATE_PATH = "generator/templates/vue_view.vue.ftl";
 
     public static void main(String[] args) {
         AutoGenerator generator = new AutoGenerator();
@@ -84,6 +89,50 @@ public class CodeGenerator {
         templateConfig.setServiceImpl(SERVICE_IMPL_TEMPLATE_PATH);
         templateConfig.setController(CONTROLLER_TEMPLATE_PATH);
         generator.setTemplate(templateConfig);
+
+        // 自定义输出配置 - Vue页面
+        InjectionConfig injectionConfig = new InjectionConfig() {
+            @Override
+            public void initMap() {
+                // 可以在此处添加自定义参数
+            }
+        };
+        List<FileOutConfig> focList = new ArrayList<>();
+        // Vue 列表页面
+        focList.add(new FileOutConfig(VUE_INDEX_TEMPLATE_PATH) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                String entityName = tableInfo.getEntityName();
+                return projectPath + "/src/main/resources/generator/vue/" + entityName + ".vue";
+            }
+        });
+        // Vue 新增页面
+        focList.add(new FileOutConfig(VUE_ADD_TEMPLATE_PATH) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                String entityName = tableInfo.getEntityName();
+                return projectPath + "/src/main/resources/generator/vue/" + entityName + "Add.vue";
+            }
+        });
+        // Vue 编辑页面
+        focList.add(new FileOutConfig(VUE_EDIT_TEMPLATE_PATH) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                String entityName = tableInfo.getEntityName();
+                return projectPath + "/src/main/resources/generator/vue/" + entityName + "Edit.vue";
+            }
+        });
+        // Vue 详情页面
+        focList.add(new FileOutConfig(VUE_VIEW_TEMPLATE_PATH) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                String entityName = tableInfo.getEntityName();
+                return projectPath + "/src/main/resources/generator/vue/" + entityName + "View.vue";
+            }
+        });
+        injectionConfig.setFileOutConfigList(focList);
+        generator.setCfg(injectionConfig);
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();

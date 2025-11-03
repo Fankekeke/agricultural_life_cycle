@@ -14,6 +14,12 @@ import java.util.List;
  */
 public interface BulletinInfoMapper extends BaseMapper<BulletinInfo> {
 
-    // 分页获取公告信息
-    IPage<LinkedHashMap<String, Object>> getBulletinByPage(Page page, @Param("bulletinInfo") BulletinInfo bulletinInfo);
+    /**
+     * 分页查询公告信息
+     *
+     * @param page         分页对象
+     * @param bulletinInfo 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> getBulletinByPage(Page<BulletinInfo> page, @Param("queryParams") BulletinInfo bulletinInfo);
 }

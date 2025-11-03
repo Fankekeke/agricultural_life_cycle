@@ -12,6 +12,12 @@ import java.util.LinkedHashMap;
  */
 public interface IBulletinInfoService extends IService<BulletinInfo> {
 
-    // 分页获取公告信息
-    IPage<LinkedHashMap<String, Object>> getBulletinByPage(Page page, BulletinInfo bulletinInfo);
+    /**
+     * 分页查询公告信息
+     *
+     * @param page         分页对象
+     * @param bulletinInfo 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> getBulletinByPage(Page<BulletinInfo> page, BulletinInfo bulletinInfo);
 }

@@ -16,8 +16,15 @@ import java.util.LinkedHashMap;
 @Service
 public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, BulletinInfo> implements IBulletinInfoService {
 
+    /**
+     * 分页查询公告信息
+     *
+     * @param page         分页对象
+     * @param bulletinInfo 参数
+     * @return 结果
+     */
     @Override
-    public IPage<LinkedHashMap<String, Object>> getBulletinByPage(Page page, BulletinInfo bulletinInfo) {
+    public IPage<LinkedHashMap<String, Object>> getBulletinByPage(Page<BulletinInfo> page, BulletinInfo bulletinInfo) {
         return baseMapper.getBulletinByPage(page, bulletinInfo);
     }
 }

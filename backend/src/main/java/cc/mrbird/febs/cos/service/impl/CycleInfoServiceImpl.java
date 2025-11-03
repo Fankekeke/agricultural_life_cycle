@@ -1,7 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.entity.CycleInfo;
-import cc.mrbird.febs.cos.mapper.CycleInfoMapper;
+import cc.mrbird.febs.cos.dao.CycleInfoMapper;
 import cc.mrbird.febs.cos.service.ICycleInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

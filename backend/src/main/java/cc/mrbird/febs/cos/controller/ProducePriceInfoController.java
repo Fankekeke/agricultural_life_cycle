@@ -32,7 +32,7 @@ public class ProducePriceInfoController {
      */
     @GetMapping("/page")
     public R page(Page<ProducePriceInfo> page, ProducePriceInfo producePriceInfo) {
-        return R.ok();
+        return R.ok(producePriceInfoService.queryPage(page, producePriceInfo));
     }
 
     @GetMapping("/list")

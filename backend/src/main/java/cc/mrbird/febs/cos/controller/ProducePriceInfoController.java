@@ -35,6 +35,27 @@ public class ProducePriceInfoController {
         return R.ok(producePriceInfoService.queryPage(page, producePriceInfo));
     }
 
+    /**
+     * 查询产品最新价格
+     *
+     * @return 列表
+     */
+    @GetMapping("/queryProduceListLastPrice")
+    public R queryProduceListLastPrice() {
+        return R.ok(producePriceInfoService.queryProduceLastPrice());
+    }
+
+    /**
+     * 查询产品价格趋势
+     *
+     * @param produceId 产品ID
+     * @return 结果
+     */
+    @GetMapping("/queryProduceTrendByDay")
+    public R queryProduceTrendByDay(Integer produceId) {
+        return R.ok(producePriceInfoService.queryProduceTrendByDay(produceId));
+    }
+
     @GetMapping("/list")
     public R list() {
         return R.ok(producePriceInfoService.list());

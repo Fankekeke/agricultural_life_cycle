@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.CycleInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.ICycleInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class CycleInfoController {
 
     private final ICycleInfoService cycleInfoService;
+
+    private final IUserInfoService userInfoService;
 
     /**
      * 分页查询产品周期
@@ -48,6 +53,10 @@ public class CycleInfoController {
      */
     @PostMapping
     public R save(CycleInfo cycleInfo) {
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, cycleInfo.getUserId()));
+        if (userInfo != null) {
+            cycleInfo.setUserId(userInfo.getId());
+        }
         cycleInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(cycleInfoService.save(cycleInfo));
     }

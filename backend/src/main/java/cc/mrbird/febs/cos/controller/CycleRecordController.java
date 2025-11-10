@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.CycleRecord;
 import cc.mrbird.febs.cos.service.ICycleRecordService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,17 @@ public class CycleRecordController {
     @GetMapping("/page")
     public R page(Page<CycleRecord> page, CycleRecord cycleRecord) {
         return R.ok();
+    }
+
+    /**
+     * 查询产品周期详情
+     *
+     * @param cycleId 周期ID
+     * @return 列表
+     */
+    @GetMapping("/queryCycleRecordListByCycleId")
+    public R queryCycleRecordListByCycleId(@RequestParam Integer cycleId) {
+        return R.ok(cycleRecordService.list(Wrappers.<CycleRecord>lambdaQuery().eq(CycleRecord::getCycleId, cycleId).orderByAsc(CycleRecord::getCreateDate)));
     }
 
     @GetMapping("/list")

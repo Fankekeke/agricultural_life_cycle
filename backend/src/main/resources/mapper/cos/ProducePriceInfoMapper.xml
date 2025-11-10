@@ -2,4 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.ProducePriceInfoMapper">
 
+    <!-- 查询产品最新价格 -->
+    <select id="queryProduceLastPrice" resultType="java.util.LinkedHashMap">
+        SELECT p1.*
+        FROM produce_price_info p1
+                 INNER JOIN (SELECT produce_id, MAX(create_time) as max_time
+                             FROM produce_price_info
+                             GROUP BY produce_id) p2 ON p1.produce_id = p2.produce_id AND p1.create_time = p2.max_time
+    </select>
+
+    <select id="queryProduceTrendByDay" resultType="java.util.LinkedHashMap">
+        SELECT
+            DATE_FORMAT(create_time, '%Y-%m-%d') as date,
+           AVG(price) as avgPrice,
+           MIN(price) as minPrice,
+           MAX(price) as maxPrice
+        FROM produce_price_info
+        WHERE produce_id = #{produceId}
+          AND create_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
+        ORDER BY date ASC
+    </select>
 </mapper>

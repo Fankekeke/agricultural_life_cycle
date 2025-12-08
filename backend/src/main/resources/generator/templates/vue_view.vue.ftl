@@ -1,3 +1,4 @@
+<#assign entityName = (entity?lower_case)!''>
 <template>
   <a-modal v-model="show" title="${entity}详情" @cancel="onClose" :width="1000">
     <template slot="footer">
@@ -5,12 +6,12 @@
         关闭
       </a-button>
     </template>
-    <div style="font-size: 13px;font-family: SimHei" v-if="${entity.toLowerCase()}Data !== null">
+    <div style="font-size: 13px;font-family: SimHei" v-if="${entityName}Data !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">${entity}信息</span></a-col>
         <#list table.fields as field>
           <a-col :span="8"><b>${field.comment}：</b>
-            {{ ${entity.toLowerCase()}Data.${field.propertyName} ? ${entity.toLowerCase()}Data.${field.propertyName} : '- -' }}
+            {{ ${entityName}Data.${field.propertyName} ? ${entityName}Data.${field.propertyName} : '- -' }}
           </a-col>
         </#list>
       </a-row>
@@ -48,20 +49,20 @@ function getBase64 (file) {
   })
 }
 export default {
-  name: '${entity.toLowerCase()}View',
+  name: '${entityName}View',
   props: {
-    ${entity.toLowerCase()}Show: {
+    ${entityName}Show: {
       type: Boolean,
       default: false
     },
-    ${entity.toLowerCase()}Data: {
+    ${entityName}Data: {
       type: Object
     }
   },
   computed: {
     show: {
       get: function () {
-        return this.${entity.toLowerCase()}Show
+        return this.${entityName}Show
       },
       set: function () {
       }
@@ -76,9 +77,9 @@ export default {
     }
   },
   watch: {
-    ${entity.toLowerCase()}Show: function (value) {
-      if (value && this.${entity.toLowerCase()}Data && this.${entity.toLowerCase()}Data.images) {
-        this.imagesInit(this.${entity.toLowerCase()}Data.images)
+    ${entityName}Show: function (value) {
+      if (value && this.${entityName}Data && this.${entityName}Data.images) {
+        this.imagesInit(this.${entityName}Data.images)
       }
     }
   },

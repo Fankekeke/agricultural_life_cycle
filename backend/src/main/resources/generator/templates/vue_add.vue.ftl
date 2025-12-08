@@ -1,3 +1,4 @@
+<#assign entityName = (entity?lower_case)!''>
 <template>
   <a-modal v-model="show" title="新增${entity}" @cancel="onClose" :width="800">
     <template slot="footer">
@@ -40,9 +41,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: '${entity.toLowerCase()}Add',
+  name: '${entityName}Add',
   props: {
-    ${entity.toLowerCase()}AddVisiable: {
+    ${entityName}AddVisiable: {
       default: false
     }
   },
@@ -52,7 +53,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.${entity.toLowerCase()}AddVisiable
+        return this.${entityName}AddVisiable
       },
       set: function () {
       }
@@ -99,7 +100,7 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true
-          this.$post('/cos/${entity.toLowerCase()}-info', {
+          this.$post('/cos/${entityName}-info', {
             ...values
           }).then((r) => {
             this.reset()

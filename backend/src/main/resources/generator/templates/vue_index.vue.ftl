@@ -1,3 +1,4 @@
+<#assign entityName = (entity?lower_case)!''>
 <template>
   <a-card :bordered="false" class="card-area">
     <div :class="advanced ? 'search' : null">
@@ -40,52 +41,52 @@
                @change="handleTableChange">
         <template slot="operation" slot-scope="text, record">
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
-          <a-icon type="file-search" @click="${entity.toLowerCase()}ViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
+          <a-icon type="file-search" @click="${entityName}ViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
-    <${entity.toLowerCase()}-add
-      v-if="${entity.toLowerCase()}Add.visiable"
+    <${entityName}-add
+      v-if="${entityName}Add.visiable"
       @close="handle${entity}AddClose"
       @success="handle${entity}AddSuccess"
-      :${entity.toLowerCase()}AddVisiable="${entity.toLowerCase()}Add.visiable">
-    </${entity.toLowerCase()}-add>
-    <${entity.toLowerCase()}-edit
-      ref="${entity.toLowerCase()}Edit"
+      :${entityName}AddVisiable="${entityName}Add.visiable">
+    </${entityName}-add>
+    <${entityName}-edit
+      ref="${entityName}Edit"
       @close="handle${entity}EditClose"
       @success="handle${entity}EditSuccess"
-      :${entity.toLowerCase()}EditVisiable="${entity.toLowerCase()}Edit.visiable">
-    </${entity.toLowerCase()}-edit>
-    <${entity.toLowerCase()}-view
+      :${entityName}EditVisiable="${entityName}Edit.visiable">
+    </${entityName}-edit>
+    <${entityName}-view
       @close="handle${entity}ViewClose"
-      :${entity.toLowerCase()}Show="${entity.toLowerCase()}View.visiable"
-      :${entity.toLowerCase()}Data="${entity.toLowerCase()}View.data">
-    </${entity.toLowerCase()}-view>
+      :${entityName}Show="${entityName}View.visiable"
+      :${entityName}Data="${entityName}View.data">
+    </${entityName}-view>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import ${entity.toLowerCase()}Add from './${entity}Add'
-import ${entity.toLowerCase()}Edit from './${entity}Edit'
-import ${entity.toLowerCase()}View from './${entity}View.vue'
+import ${entityName}Add from './${entity}Add'
+import ${entityName}Edit from './${entity}Edit'
+import ${entityName}View from './${entity}View.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: '${entity.toLowerCase()}',
-  components: {${entity.toLowerCase()}Add, ${entity.toLowerCase()}Edit, ${entity.toLowerCase()}View, RangeDate},
+  name: '${entityName}',
+  components: {${entityName}Add, ${entityName}Edit, ${entityName}View, RangeDate},
   data () {
     return {
       advanced: false,
-      ${entity.toLowerCase()}Add: {
+      ${entityName}Add: {
         visiable: false
       },
-      ${entity.toLowerCase()}Edit: {
+      ${entityName}Edit: {
         visiable: false
       },
-      ${entity.toLowerCase()}View: {
+      ${entityName}View: {
         visiable: false,
         data: null
       },
@@ -137,12 +138,12 @@ export default {
     this.fetch()
   },
   methods: {
-    ${entity.toLowerCase()}ViewOpen (row) {
-      this.${entity.toLowerCase()}View.data = row
-      this.${entity.toLowerCase()}View.visiable = true
+    ${entityName}ViewOpen (row) {
+      this.${entityName}View.data = row
+      this.${entityName}View.visiable = true
     },
     handle${entity}ViewClose () {
-      this.${entity.toLowerCase()}View.visiable = false
+      this.${entityName}View.visiable = false
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
@@ -151,25 +152,25 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.${entity.toLowerCase()}Add.visiable = true
+      this.${entityName}Add.visiable = true
     },
     handle${entity}AddClose () {
-      this.${entity.toLowerCase()}Add.visiable = false
+      this.${entityName}Add.visiable = false
     },
     handle${entity}AddSuccess () {
-      this.${entity.toLowerCase()}Add.visiable = false
+      this.${entityName}Add.visiable = false
       this.$message.success('新增${entity}成功')
       this.search()
     },
     edit (record) {
-      this.$refs.${entity.toLowerCase()}Edit.setFormValues(record)
-      this.${entity.toLowerCase()}Edit.visiable = true
+      this.$refs.${entityName}Edit.setFormValues(record)
+      this.${entityName}Edit.visiable = true
     },
     handle${entity}EditClose () {
-      this.${entity.toLowerCase()}Edit.visiable = false
+      this.${entityName}Edit.visiable = false
     },
     handle${entity}EditSuccess () {
-      this.${entity.toLowerCase()}Edit.visiable = false
+      this.${entityName}Edit.visiable = false
       this.$message.success('修改${entity}成功')
       this.search()
     },
@@ -185,7 +186,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/${entity.toLowerCase()}-info/' + ids).then(() => {
+          that.$delete('/cos/${entityName}-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -255,7 +256,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/${entity.toLowerCase()}-info/page', {
+      this.$get('/cos/${entityName}-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

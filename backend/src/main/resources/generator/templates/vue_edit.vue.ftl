@@ -1,3 +1,4 @@
+<#assign entityName = (entity?lower_case)!''>
 <template>
   <a-modal v-model="show" title="修改${entity}" @cancel="onClose" :width="800">
     <template slot="footer">
@@ -40,9 +41,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: '${entity.toLowerCase()}Edit',
+  name: '${entityName}Edit',
   props: {
-    ${entity.toLowerCase()}EditVisiable: {
+    ${entityName}EditVisiable: {
       default: false
     }
   },
@@ -52,7 +53,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.${entity.toLowerCase()}EditVisiable
+        return this.${entityName}EditVisiable
       },
       set: function () {
       }
@@ -92,18 +93,18 @@ export default {
         this.fileList = imageList
       }
     },
-    setFormValues ({...${entity.toLowerCase()}}) {
-      this.rowId = ${entity.toLowerCase()}.id
+    setFormValues ({...${entityName}}) {
+      this.rowId = ${entityName}.id
       let fields = [<#list table.fields as field>'${field.propertyName}'<#if field_has_next>,</#if></#list>]
       let obj = {}
-      Object.keys(${entity.toLowerCase()}).forEach((key) => {
+      Object.keys(${entityName}).forEach((key) => {
         if (key === 'images') {
           this.fileList = []
-          this.imagesInit(${entity.toLowerCase()}['images'])
+          this.imagesInit(${entityName}['images'])
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
-          obj[key] = ${entity.toLowerCase()}[key]
+          obj[key] = ${entityName}[key]
         }
       })
       this.form.setFieldsValue(obj)
@@ -121,7 +122,7 @@ export default {
         values.id = this.rowId
         if (!err) {
           this.loading = true
-          this.$put('/cos/${entity.toLowerCase()}-info', {
+          this.$put('/cos/${entityName}-info', {
             ...values
           }).then((r) => {
             this.reset()
